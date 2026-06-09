@@ -8,14 +8,13 @@
   <link rel="stylesheet" href="style.css"/>
 
   <style>
-    /* Estilo extra solo para admin */
     .admin-container {
       padding: 40px;
       max-width: 600px;
       margin: auto;
     }
 
-    .admin-container h1 {
+    h1 {
       text-align: center;
       margin-bottom: 20px;
     }
@@ -83,8 +82,18 @@
   </div>
 
   <script>
+    // ===============================
+    // PRODUCTOS (LOCALSTORAGE)
+    // ===============================
     let products = JSON.parse(localStorage.getItem("products")) || [];
 
+    function saveProducts() {
+      localStorage.setItem("products", JSON.stringify(products));
+    }
+
+    // ===============================
+    // AGREGAR PRODUCTO
+    // ===============================
     function addProduct() {
       const name = document.getElementById("name").value;
       const price = document.getElementById("price").value;
@@ -98,21 +107,25 @@
       const product = {
         name,
         price,
-        image: image || "https://via.placeholder.com/150"
+        image: image || "https://via.placeholder.com/300"
       };
 
       products.push(product);
-      localStorage.setItem("products", JSON.stringify(products));
+
+      saveProducts(); // 👈 guarda en localStorage
 
       renderProducts();
       clearForm();
     }
 
+    // ===============================
+    // MOSTRAR PRODUCTOS EN ADMIN
+    // ===============================
     function renderProducts() {
       const list = document.getElementById("list");
       list.innerHTML = "";
 
-      products.forEach((p, index) => {
+      products.forEach((p) => {
         list.innerHTML += `
           <div class="item">
             <strong>${p.name}</strong><br>
@@ -122,12 +135,16 @@
       });
     }
 
+    // ===============================
+    // LIMPIAR FORMULARIO
+    // ===============================
     function clearForm() {
       document.getElementById("name").value = "";
       document.getElementById("price").value = "";
       document.getElementById("image").value = "";
     }
 
+    // inicializar
     renderProducts();
   </script>
 
