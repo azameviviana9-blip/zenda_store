@@ -1,1 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Zenda Store</title>
 
+  <link rel="stylesheet" href="style.css"/>
+
+  <style>
+    /* Estilo extra solo para admin */
+    .admin-container {
+      padding: 40px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .admin-container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #1a1a1a;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #333;
+    }
+
+    .form input {
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    .form button {
+      padding: 10px;
+      background: #ff0055;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .products-list {
+      margin-top: 20px;
+    }
+
+    .item {
+      background: #111;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #333;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="admin-container">
+
+    <h1>🖤 Admin Zenda Store</h1>
+
+    <!-- FORMULARIO -->
+    <div class="form">
+
+      <input type="text" id="name" placeholder="Nombre del producto">
+      <input type="text" id="price" placeholder="Precio">
+      <input type="text" id="image" placeholder="URL de imagen (opcional)">
+
+      <button onclick="addProduct()">Agregar Producto</button>
+
+    </div>
+
+    <!-- LISTA -->
+    <div class="products-list" id="list"></div>
+
+  </div>
+
+  <script>
+    let products = JSON.parse(localStorage.getItem("products")) || [];
+
+    function addProduct() {
+      const name = document.getElementById("name").value;
+      const price = document.getElementById("price").value;
+      const image = document.getElementById("image").value;
+
+      if (!name || !price) {
+        alert("Completa nombre y precio");
+        return;
+      }
+
+      const product = {
+        name,
+        price,
+        image: image || "https://via.placeholder.com/150"
+      };
+
+      products.push(product);
+      localStorage.setItem("products", JSON.stringify(products));
+
+      renderProducts();
+      clearForm();
+    }
+
+    function renderProducts() {
+      const list = document.getElementById("list");
+      list.innerHTML = "";
+
+      products.forEach((p, index) => {
+        list.innerHTML += `
+          <div class="item">
+            <strong>${p.name}</strong><br>
+            💲 ${p.price}
+          </div>
+        `;
+      });
+    }
+
+    function clearForm() {
+      document.getElementById("name").value = "";
+      document.getElementById("price").value = "";
+      document.getElementById("image").value = "";
+    }
+
+    renderProducts();
+  </script>
+
+</body>
+</html>
